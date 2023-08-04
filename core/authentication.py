@@ -1,4 +1,4 @@
-import jwt
+import jwt  # use pip install PyJWT rather than install the jwt package straight
 import datetime
 
 
