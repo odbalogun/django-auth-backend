@@ -21,8 +21,8 @@ def create_refresh_token(user_id):
 
 def decode_access_token(token):
     try:
-        payload = jwt.decode(token, 'access_secret', algorithm='HS256')
-
-        return payload.user_id
-    except:
+        payload = jwt.decode(token, 'access_secret', algorithms='HS256')
+        return payload['user_id']
+    except Exception as e:
+        print(e)
         raise exceptions.AuthenticationFailed('Unauthenticated')
