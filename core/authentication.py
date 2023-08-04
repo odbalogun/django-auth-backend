@@ -1,5 +1,6 @@
 import jwt  # use pip install PyJWT rather than install the jwt package straight
 import datetime
+from rest_framework import exceptions
 
 
 def create_access_token(user_id):
@@ -16,3 +17,12 @@ def create_refresh_token(user_id):
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7),
         'iat': datetime.datetime.utcnow()
     }, 'refresh_secret', algorithm='HS256')
+
+
+def decode_access_token(token):
+    try:
+        payload = jwt.decode(token, 'access_secret', algorithm='HS256')
+
+        return payload.user_id
+    except:
+        raise exceptions.AuthenticationFailed('Unauthenticated')
