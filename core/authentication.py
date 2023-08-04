@@ -1,6 +1,23 @@
 import jwt  # use pip install PyJWT rather than install the jwt package straight
 import datetime
 from rest_framework import exceptions
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.authentication import get_authorization_header
+
+from .models import User
+
+
+class JWTAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        auth = get_authorization_header(request).split()
+
+        if auth and len(auth) == 2:
+            token = auth[1].decode('utf-8')
+            user_id = decode_access_token(token)
+
+            user = User.objects.get(pk=user_id)
+            return (user, None)
+        raise exceptions.NotAuthenticated('User not authenticated')
 
 
 def create_access_token(user_id):
